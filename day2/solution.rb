@@ -35,6 +35,14 @@ class Game
       .map { |game| game.id }
       .inject(&:+)
   end
+
+  def self.sum_min_set_powers(lines)
+    lines
+      .map { |line| Game.new(line) }
+      .map { |game| game.min_set }
+      .map { |cube_set| cube_set.power }
+      .inject(&:+)
+  end
 end
 
 class CubeSet
@@ -87,5 +95,7 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   total_set = { red: 12, green: 13, blue: 14 }
-  puts Game.valid_games_sum(File.readlines("input.txt"), CubeSet.new(total_set))
+  lines = File.readlines("input.txt")
+  puts Game.valid_games_sum(lines, CubeSet.new(total_set))
+  puts Game.sum_min_set_powers(lines)
 end

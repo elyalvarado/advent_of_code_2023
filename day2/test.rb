@@ -52,4 +52,8 @@ class Day2 < Minitest::Test
     assert_equal Game.new(GAMES[3]).min_set.power, 630
     assert_equal Game.new(GAMES[4]).min_set.power, 36
   end
+
+  def test_sum_min_set_powers
+    assert_equal Game.sum_min_set_powers(GAMES), 2286
+  end
 end
