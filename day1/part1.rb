@@ -11,3 +11,7 @@ def sum_calibration_doc(doc)
   end
   line_values.inject(&:+)
 end
+
+if __FILE__ == $PROGRAM_NAME
+  puts sum_calibration_doc(File.read("./input.txt"))
+end
