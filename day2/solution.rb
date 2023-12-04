@@ -15,14 +15,7 @@ class Game
   end
 
   def min_set
-    maxs = {}
-    sets.each do |cube_set|
-      cube_set.each do |color, value|
-        maxs[color] = value unless maxs[color]
-        maxs[color] = value if value > maxs[color]
-      end
-    end
-    CubeSet.new(maxs)
+    CubeSet.min_set(sets)
   end
 
   def is_valid?(total_set)
@@ -68,6 +61,17 @@ class CubeSet
     @set.inject(1) do |power, keys|
       power * keys[1]
     end
+  end
+
+  def self.min_set(sets)
+    maxs = {}
+    sets.each do |cube_set|
+      cube_set.each do |color, value|
+        maxs[color] = value unless maxs[color]
+        maxs[color] = value if value > maxs[color]
+      end
+    end
+    CubeSet.new(maxs)
   end
 
   private
