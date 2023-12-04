@@ -18,7 +18,7 @@ class Day2 < Minitest::Test
 
   def test_sets
     'Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green'
-    assert_equal Game.new(GAMES[0]).sets, [
+    assert_equal Game.new(GAMES[0]).sets.map(&:to_h), [
       { blue: 3, red: 4 },
       { red: 1, green: 2, blue: 6 },
       { green: 2 }
@@ -38,5 +38,7 @@ class Day2 < Minitest::Test
     assert_equal Game.valid_games_sum(GAMES, total_set), 8
   end
 
-
+  def test_set_power
+    assert_equal CubeSet.new("4 red, 2 green, 6 blue").power, 48
+  end
 end

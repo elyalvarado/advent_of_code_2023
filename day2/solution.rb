@@ -10,7 +10,7 @@ class Game
 
   def sets
     @sets ||= @game_string.split(":")[1].split(";").map do |set_string|
-      parse_set set_string
+      CubeSet.new(set_string)
     end
   end
 
@@ -31,9 +31,29 @@ class Game
       .map { |game| game.id }
       .inject(&:+)
   end
+end
+
+class CubeSet
+  def initialize(set_string_or_hash)
+    @set = set_string_or_hash.is_a?(Hash) ? set_string_or_hash : parse(set_string_or_hash)
+  end
+
+  def [](key)
+    @set[key]
+  end
+
+  def to_h
+    @set
+  end
+
+  def power
+    @set.inject(1) do |power, keys|
+      power * keys[1]
+    end
+  end
 
   private
-  def parse_set set_string
+  def parse set_string
     set = {}
     set_string.split(",").each do |cube_string|
       number, color = cube_string.split(" ")
@@ -41,9 +61,7 @@ class Game
     end
     set
   end
-
 end
-
 
 if __FILE__ == $PROGRAM_NAME
   total_set = { red: 12, green: 13, blue: 14 }
