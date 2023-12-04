@@ -15,4 +15,28 @@ class Day2 < Minitest::Test
       assert_equal Game.new(game_string).id, idx + 1
     end
   end
+
+  def test_sets
+    'Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green'
+    assert_equal Game.new(GAMES[0]).sets, [
+      { blue: 3, red: 4 },
+      { red: 1, green: 2, blue: 6 },
+      { green: 2 }
+    ]
+  end
+
+  def test_is_valid
+    assert_equal Game.new(GAMES[0]).is_valid?(red: 12, green: 13, blue: 14), true
+    assert_equal Game.new(GAMES[1]).is_valid?(red: 12, green: 13, blue: 14), true
+    assert_equal Game.new(GAMES[2]).is_valid?(red: 12, green: 13, blue: 14), false
+    assert_equal Game.new(GAMES[3]).is_valid?(red: 12, green: 13, blue: 14), false
+    assert_equal Game.new(GAMES[4]).is_valid?(red: 12, green: 13, blue: 14), true
+  end
+
+  def test_valid_games_sum
+    total_set = { red: 12, green: 13, blue: 14 }
+    assert_equal Game.valid_games_sum(GAMES, total_set), 8
+  end
+
+
 end
