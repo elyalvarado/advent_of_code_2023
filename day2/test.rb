@@ -41,4 +41,15 @@ class Day2 < Minitest::Test
   def test_set_power
     assert_equal CubeSet.new("4 red, 2 green, 6 blue").power, 48
   end
+
+  def test_min_set
+    assert_equal Game.new(GAMES[0]).min_set.to_h, { red: 4, green: 2, blue: 6}
+  end
+  def test_min_set_powers
+    assert_equal Game.new(GAMES[0]).min_set.power, 48
+    assert_equal Game.new(GAMES[1]).min_set.power, 12
+    assert_equal Game.new(GAMES[2]).min_set.power, 1560
+    assert_equal Game.new(GAMES[3]).min_set.power, 630
+    assert_equal Game.new(GAMES[4]).min_set.power, 36
+  end
 end
