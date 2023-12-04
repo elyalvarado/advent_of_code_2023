@@ -34,6 +34,7 @@ class Game
 end
 
 class CubeSet
+  include Enumerable
   def initialize(set_string_or_hash)
     @set = set_string_or_hash.is_a?(Hash) ? set_string_or_hash : parse(set_string_or_hash)
   end
@@ -44,6 +45,12 @@ class CubeSet
 
   def to_h
     @set
+  end
+
+  def each
+    @set.each do |x, y|
+      yield x, y
+    end
   end
 
   def power

@@ -35,7 +35,7 @@ class Day2 < Minitest::Test
 
   def test_valid_games_sum
     total_set = { red: 12, green: 13, blue: 14 }
-    assert_equal Game.valid_games_sum(GAMES, total_set), 8
+    assert_equal Game.valid_games_sum(GAMES, CubeSet.new(total_set)), 8
   end
 
   def test_set_power
