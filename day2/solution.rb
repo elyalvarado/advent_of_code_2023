@@ -46,4 +46,6 @@ end
 
 
 if __FILE__ == $PROGRAM_NAME
+  total_set = { red: 12, green: 13, blue: 14 }
+  puts Game.valid_games_sum(File.readlines("input.txt"), total_set)
 end
