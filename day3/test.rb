@@ -58,17 +58,17 @@ class Day3 < Minitest::Test
     assert_equal 4361, schematic_sum(SCHEMATIC)
   end
 
-  def test_adjacent_gears
+  def test_adjacent_stars
     matrix = schematic_to_matrix(SCHEMATIC)
-    assert_equal [ [1, 3] ], adjacent_gears(2,0,matrix)
+    assert_equal [ [1, 3] ], adjacent_stars(2,0,matrix)
   end
 
-  def xtest_gear_ratios
+  def test_gear_ratios
     assert_equal gear_ratios(SCHEMATIC).sort,
                  [ 16345, 451490 ].sort
   end
 
-  def xtest_gears_sum
+  def test_gears_sum
     assert_equal 467835, gears_sum(SCHEMATIC)
   end
 end
