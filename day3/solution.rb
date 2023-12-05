@@ -11,7 +11,7 @@ def adjacent_numbers(schematic)
         number << char
         is_adjacent = is_adjacent || has_adjacent_symbol?(char_index, line_index, matrix)
         if char_index == matrix_width - 1
-          numbers << number.to_i
+          numbers << number.to_i if is_adjacent
           number = ""
           is_adjacent = false
         end
