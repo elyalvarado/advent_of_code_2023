@@ -1,31 +1,4 @@
-def adjacent_numbers(schematic)
-  matrix = schematic_to_matrix(schematic)
-  matrix_width = matrix.first.size
-  numbers = []
-  matrix.each_with_index do |line, line_index|
-    number = ""
-    is_adjacent = false
-    line.each_with_index do |char, char_index|
-      is_a_number = char =~ /\d/
-      if is_a_number
-        number << char
-        is_adjacent = is_adjacent || has_adjacent_symbol?(char_index, line_index, matrix)
-        if char_index == matrix_width - 1
-          numbers << number.to_i if is_adjacent
-          number = ""
-          is_adjacent = false
-        end
-      else
-        numbers << number.to_i if is_adjacent && number != ""
-        number = ""
-        is_adjacent = false
-      end
-    end
-  end
-  numbers
-end
-
-def gear_ratios(schematic)
+def adjacent_number_and_gear_ratios(schematic)
   matrix = schematic_to_matrix(schematic)
   matrix_width = matrix.first.size
   numbers = []
@@ -67,12 +40,20 @@ def gear_ratios(schematic)
     end
   end
   ratios = []
-  gears.each do |gear, numbers|
-    if numbers.size == 2
-      ratios << numbers.inject(&:*)
+  gears.each do |gear, gear_numbers|
+    if gear_numbers.size == 2
+      ratios << gear_numbers.inject(&:*)
     end
   end
-  ratios
+  { numbers: numbers , ratios: ratios }
+end
+
+def adjacent_numbers(schematic)
+  adjacent_number_and_gear_ratios(schematic)[:numbers]
+end
+
+def gear_ratios(schematic)
+  adjacent_number_and_gear_ratios(schematic)[:ratios]
 end
 
 def adjacent_positions(char, line, matrix)
