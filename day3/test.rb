@@ -58,7 +58,7 @@ class Day3 < Minitest::Test
     assert_equal 4361, schematic_sum(SCHEMATIC)
   end
 
-  def xtest_adjacent_gears
+  def test_adjacent_gears
     matrix = schematic_to_matrix(SCHEMATIC)
     assert_equal [ [1, 3] ], adjacent_gears(2,0,matrix)
   end
