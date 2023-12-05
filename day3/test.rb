@@ -53,4 +53,8 @@ class Day3 < Minitest::Test
     assert_equal adjacent_numbers(SCHEMATIC).sort,
                  [ 467, 35, 633, 617, 592, 755, 664, 598 ].sort
   end
+
+  def test_schematic_sum
+    assert_equal 4361, schematic_sum(SCHEMATIC)
+  end
 end

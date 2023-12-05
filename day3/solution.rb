@@ -55,5 +55,11 @@ def schematic_to_matrix(schematic)
   schematic.split("\n").map { |line| line.split("") }
 end
 
+def schematic_sum(schematic)
+  adjacent_numbers(schematic).inject(&:+)
+end
+
 if __FILE__ == $PROGRAM_NAME
+  schematic = File.read("input.txt")
+  puts adjacent_numbers(schematic).inject(&:+)
 end
