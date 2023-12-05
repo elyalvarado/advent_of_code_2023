@@ -36,7 +36,11 @@ class Day4 < Minitest::Test
     assert_equal 0, card(6).points
   end
 
-  def test_pile_points
-    assert_equal 13, Card.pile_points(CARDS)
+  def test_stack_points
+    assert_equal 13, CardsStack.new(CARDS).points
+  end
+
+  def test_card_id
+    assert_equal 'Card 1', card(1).card_id
   end
 end
