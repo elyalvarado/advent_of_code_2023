@@ -23,9 +23,9 @@ class CardsStack
   attr_reader :original_stack
 
   def initialize(stack_doc)
-    @copies = {}
     @processed = false
     @original_stack = parse(stack_doc)
+    @copies = @original_stack.inject({}) { |current_copies, card| current_copies[card.card_id] = 1; current_copies }
   end
 
   def points
@@ -51,7 +51,6 @@ class CardsStack
 
     self.original_stack.each_with_index do |card, card_index|
       card_id = card.card_id
-      @copies[card_id] ||= 1
       # puts "Processing Card #{card.card_id}"
       # puts " - Initial copies: #{@copies.inspect}"
       wins = card.matches.size
@@ -63,7 +62,7 @@ class CardsStack
         current_card = self.original_stack[current_index]
         next unless current_card
         current_card_id = current_card.card_id
-        @copies[current_card_id] = (@copies[current_card_id] || 1) + multiplier
+        @copies[current_card_id] = @copies[current_card_id] + multiplier
       end
       # puts " - Final copies: #{@copies.inspect}"
     end
@@ -75,5 +74,7 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   stack = File.read("input.txt")
-  puts Card.pile_points(stack)
+  card_stack = CardsStack.new(stack)
+  puts card_stack.points
+  puts card_stack.total_scratch_cards
 end
