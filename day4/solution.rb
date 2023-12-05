@@ -22,9 +22,8 @@ end
 class CardsStack
   attr_reader :original_stack
 
-
   def initialize(stack_doc)
-    @copies = Hash.new(1)
+    @copies = {}
     @processed = false
     @original_stack = parse(stack_doc)
   end
@@ -33,9 +32,43 @@ class CardsStack
     self.original_stack.inject(0) { |sum, card| sum += card.points; sum }
   end
 
+  def total_scratch_cards
+    process_all_winners_and_copies
+    total = 0
+    @copies.each do |card_id, copies|
+      total += copies
+    end
+    total
+  end
+
   private
   def parse(stack_doc)
     stack_doc.split("\n").map { |card_string| Card.new(card_string) }
+  end
+
+  def process_all_winners_and_copies
+    return if @processed
+
+    self.original_stack.each_with_index do |card, card_index|
+      card_id = card.card_id
+      @copies[card_id] ||= 1
+      # puts "Processing Card #{card.card_id}"
+      # puts " - Initial copies: #{@copies.inspect}"
+      wins = card.matches.size
+      # puts " - wins: #{wins}"
+      multiplier = @copies[card_id]
+      # puts " - current copies of #{card_id}: #{@copies[card_id]}"
+      wins.times do |win_index|
+        current_index = card_index + win_index + 1
+        current_card = self.original_stack[current_index]
+        next unless current_card
+        current_card_id = current_card.card_id
+        @copies[current_card_id] = (@copies[current_card_id] || 1) + multiplier
+      end
+      # puts " - Final copies: #{@copies.inspect}"
+    end
+
+    @processed = true
   end
 end
 

@@ -43,4 +43,8 @@ class Day4 < Minitest::Test
   def test_card_id
     assert_equal 'Card 1', card(1).card_id
   end
+
+  def test_total_scratch_cards
+    assert_equal 30, CardsStack.new(CARDS).total_scratch_cards
+  end
 end
