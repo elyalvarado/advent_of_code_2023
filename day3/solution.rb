@@ -25,30 +25,34 @@ def adjacent_numbers(schematic)
   numbers
 end
 
+def gear_ratios(schematic)
+
+end
+
 def adjacent_positions(char, line, matrix)
   matrix_height = matrix.size
   matrix_width = matrix.first.size
   coords = []
-  coords << [char - 1, line - 1] unless char - 1 < 0 || line - 1 < 0
-  coords << [char, line - 1] unless line - 1 < 0
-  coords << [char + 1, line - 1] unless char + 1 > matrix_width - 1 || line - 1 < 0
-  coords << [char - 1, line] unless char - 1 < 0
-  coords << [char + 1, line] unless char + 1 > matrix_width - 1
-  coords << [char - 1, line + 1] unless char - 1 < 0 || line + 1 > matrix_height - 1
-  coords << [char, line + 1] unless line + 1 > matrix_height - 1
-  coords << [char + 1, line + 1] unless char + 1 > matrix_width - 1 || line + 1 > matrix_height - 1
-  coords.map do |coord|
-    char = coord[0]
-    line = coord[1]
-    matrix[line][char]
-  end
+  coords << [line - 1, char - 1] unless char - 1 < 0 || line - 1 < 0
+  coords << [line - 1, char] unless line - 1 < 0
+  coords << [line - 1, char + 1] unless char + 1 > matrix_width - 1 || line - 1 < 0
+  coords << [line, char - 1] unless char - 1 < 0
+  coords << [line, char + 1] unless char + 1 > matrix_width - 1
+  coords << [line + 1, char - 1] unless char - 1 < 0 || line + 1 > matrix_height - 1
+  coords << [line + 1, char] unless line + 1 > matrix_height - 1
+  coords << [line + 1, char + 1] unless char + 1 > matrix_width - 1 || line + 1 > matrix_height - 1
+  coords
 end
 
 def has_adjacent_symbol?(char, line, matrix)
   adjacent_positions(char, line, matrix)
-    .reject { |char| char == "."}
-    .reject { |char| char =~ /\d/ }
+    .reject { |coord| matrix[coord[0]][coord[1]] == "."}
+    .reject { |coord| matrix[coord[0]][coord[1]] =~ /\d/ }
     .size > 0
+end
+
+def adjacent_gears(char, line, matrix)
+
 end
 
 def schematic_to_matrix(schematic)
@@ -57,6 +61,10 @@ end
 
 def schematic_sum(schematic)
   adjacent_numbers(schematic).inject(&:+)
+end
+
+def gears_sum(schematic)
+  gear_ratios(schematic).inject(&:+)
 end
 
 if __FILE__ == $PROGRAM_NAME

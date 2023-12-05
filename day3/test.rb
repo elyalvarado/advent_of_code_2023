@@ -32,13 +32,13 @@ class Day3 < Minitest::Test
   def test_adjacent_positions
     matrix = schematic_to_matrix(SCHEMATIC)
     assert_equal adjacent_positions(0, 0, matrix).sort,
-                 %w{6 . .}.sort
+                 [[0, 1], [1, 0], [1, 1]]
 
     assert_equal adjacent_positions(2, 0, matrix).sort,
-                 %w{6 . . . *}.sort
+                 [[0, 1], [0, 3], [1, 1], [1, 2], [1, 3]]
 
     assert_equal adjacent_positions(3, 2, matrix).sort,
-                 %w{. * . 3 . . . .}.sort
+                 [[1, 2], [1, 3], [1, 4], [2, 2], [2, 4], [3, 2], [3, 3], [3, 4]]
   end
 
   def test_has_adjacent_symbol?
@@ -56,5 +56,19 @@ class Day3 < Minitest::Test
 
   def test_schematic_sum
     assert_equal 4361, schematic_sum(SCHEMATIC)
+  end
+
+  def xtest_adjacent_gears
+    matrix = schematic_to_matrix(SCHEMATIC)
+    assert_equal [ [1, 3] ], adjacent_gears(2,0,matrix)
+  end
+
+  def xtest_gear_ratios
+    assert_equal gear_ratios(SCHEMATIC).sort,
+                 [ 16345, 451490 ].sort
+  end
+
+  def xtest_gears_sum
+    assert_equal 467835, gears_sum(SCHEMATIC)
   end
 end
