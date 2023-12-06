@@ -14,8 +14,25 @@ class Almanac
     self.new(original_sources: original_sources, maps: maps)
   end
 
+  def final_destinations
+    original_sources.map do |source|
+      destination_for(source)
+    end
+  end
+
   def ==(another)
     self.original_sources == another.original_sources && self.maps == another.maps
+  end
+
+  private
+  def destination_for(source)
+    current_source = source
+    current_destination = nil
+    maps.size.times do |i|
+      current_destination = maps[i].map(current_source)
+      current_source = current_destination
+    end
+    current_destination
   end
 end
 

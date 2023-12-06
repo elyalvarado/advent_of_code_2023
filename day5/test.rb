@@ -107,4 +107,9 @@ class Day5 < Minitest::Test
     assert_equal Almanac.new(original_sources: [1, 2, 3, 4], maps: [map_1, map_2, map_3]),
                  Almanac.parse(almanac_doc)
   end
+
+  def test_final_destinations
+    almanac = Almanac.parse(ALMANAC)
+    assert_equal [82, 43, 86, 35], almanac.final_destinations
+  end
 end
