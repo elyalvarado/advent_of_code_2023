@@ -22,6 +22,10 @@ class Race
     # solutions are: (-b +/- Math.sqrt(b^2-4*a*c))/(2*a)
     solution1 = (-1 * time - Math.sqrt(time**2 - 4 * distance))/-2
     solution2 = (-1 * time + Math.sqrt(time**2 - 4 * distance))/-2
+
+    # If we find exact solutions they don't count as they don't beat the time
+    solution2 = solution2 + 1 if solution2.ceil.to_f == solution2
+    solution1 = solution1 - 1 if solution1.floor.to_f == solution1
     (solution2.ceil..solution1.floor).to_a
   end
 end
@@ -37,6 +41,11 @@ class RaceCollection
       races << Race.new(time.to_i, distances[index].to_i )
     end
     @races
+  end
+
+  def total_options
+    # puts races.map(&:beat_options).inspect
+    races.map(&:beat_options).map(&:size).inject(:*)
   end
 end
 
