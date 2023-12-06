@@ -74,14 +74,16 @@ class Map
   end
 
   def map(source)
-    destination = ranges.inject(nil) do |current_destination, range|
-      if current_destination.nil?
-        current_destination = range.map(source)
-      end
-      current_destination
+    maps_hash[source] || source
+  end
+
+  def maps_hash
+    return @maps_hash if @maps_hash
+    @maps_hash = {}
+    ranges.inject(@maps_hash) do |hash, range|
+      hash.merge!(range.map_hash)
     end
-    return source if destination.nil?
-    destination
+    @maps_hash
   end
 end
 

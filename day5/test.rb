@@ -90,6 +90,22 @@ class Day5 < Minitest::Test
     assert_equal 52, map.map(13)
   end
 
+  def test_map_maps_hash
+    map_doc = <<~DOC
+      soil-to-fertilizer map:
+      0 10 2
+      2 12 2
+    DOC
+    map = Map.parse(map_doc)
+    expected_hash = {
+      10 => 0,
+      11 => 1,
+      12 => 2,
+      13 => 3
+    }
+    assert_equal expected_hash, map.maps_hash
+  end
+
   def test_almanac_parse
     almanac_doc = <<~DOC
       seeds: 1 2 3 4
