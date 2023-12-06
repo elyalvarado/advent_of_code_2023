@@ -107,5 +107,7 @@ class MapRange
 end
 
 if __FILE__ == $PROGRAM_NAME
-
+  almanac_doc = File.read("input.txt")
+  almanac = Almanac.parse(almanac_doc)
+  puts almanac.final_destinations.min
 end
