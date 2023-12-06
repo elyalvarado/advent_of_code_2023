@@ -59,6 +59,12 @@ class Day5 < Minitest::Test
     assert_nil map_range.map(100)
   end
 
+  def test_map_range_map_hash
+    map_range = MapRange.parse("50 98 2")
+    expected = { 98 => 50, 99 => 51 }
+    assert_equal expected, map_range.map_hash
+  end
+
   def test_map_parse
     map_doc = <<~DOC
     seed-to-soil map:

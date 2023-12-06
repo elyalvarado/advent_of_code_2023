@@ -94,10 +94,7 @@ class MapRange
   end
 
   def map(source)
-    return nil if source < source_range_start
-    return nil if source > source_range_end
-    delta = source - source_range_start
-    destination_range_start + delta
+    map_hash[source]
   end
 
   def self.parse(doc)
@@ -109,6 +106,16 @@ class MapRange
     self.destination_range_start == another.destination_range_start &&
       self.source_range_start == another.source_range_start &&
       self.length == another.length
+  end
+
+  def map_hash
+    return @map_hash if @map_hash
+    @map_hash = {}
+    (source_range_start..source_range_end).each do |source|
+      delta = source - source_range_start
+      @map_hash[source] = destination_range_start + delta
+    end
+    @map_hash
   end
 
   private
