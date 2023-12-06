@@ -82,6 +82,29 @@ class Day5 < Minitest::Test
     assert_equal 53, map.map(14)
     assert_equal 57, map.map(57)
     assert_equal 52, map.map(13)
+  end
 
+  def test_almanac_parse
+    almanac_doc = <<~DOC
+      seeds: 1 2 3 4
+
+      seed-to-soil map:
+      0 0 3
+
+      soil-to-fertilizer map:
+      100 0 3
+
+      fertilizer-to-location map:
+      200 0 3
+    DOC
+
+    map_range_1 = MapRange.new(destination_range_start: 0, source_range_start: 0, length: 3)
+    map_1 = Map.new(source_category: 'seed', destination_category: 'soil', ranges: [map_range_1])
+    map_range_2 = MapRange.new(destination_range_start: 100, source_range_start: 0, length: 3)
+    map_2 = Map.new(source_category: 'soil', destination_category: 'fertilizer', ranges: [map_range_2])
+    map_range_3 = MapRange.new(destination_range_start: 200, source_range_start: 0, length: 3)
+    map_3 = Map.new(source_category: 'fertilizer', destination_category: 'location', ranges: [map_range_3])
+    assert_equal Almanac.new(original_sources: [1, 2, 3, 4], maps: [map_1, map_2, map_3]),
+                 Almanac.parse(almanac_doc)
   end
 end

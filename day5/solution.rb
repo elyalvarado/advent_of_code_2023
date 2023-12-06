@@ -1,5 +1,22 @@
 class Almanac
+  attr_accessor :original_sources, :maps
 
+  def initialize(original_sources:, maps:)
+    @original_sources = original_sources
+    @maps = maps
+  end
+
+  def self.parse(doc)
+    parts = doc.split("\n\n")
+    first_part = parts.shift
+    original_sources = first_part.split(": ")[1].split(" ").map(&:to_i)
+    maps = parts.map { |part| Map.parse(part) }
+    self.new(original_sources: original_sources, maps: maps)
+  end
+
+  def ==(another)
+    self.original_sources == another.original_sources && self.maps == another.maps
+  end
 end
 
 class Map
