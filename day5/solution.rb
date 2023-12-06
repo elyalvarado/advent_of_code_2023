@@ -21,11 +21,18 @@ class Almanac
   end
 
   def min_final_destination_for_ranges
-    ex = expanded_sources
-    puts expanded_sources.inspect
-    expanded_sources.map do |source|
-      destination_for(source)
-    end.min
+    current_sources = original_sources.dup
+    min = nil
+    while current_sources.size > 0
+      range_start = current_sources.shift
+      range_length = current_sources.shift
+      range_length.times do |increment|
+        source = range_start + increment
+        dest = destination_for(source)
+        min = dest if min.nil? || dest < min
+      end
+    end
+    min
   end
 
   def ==(another)
@@ -41,17 +48,6 @@ class Almanac
       current_source = current_destination
     end
     current_destination
-  end
-
-  def expanded_sources
-    ranges = []
-    (original_sources.size/2).times do |i|
-      index = i * 2
-      range_start = original_sources[index]
-      range_end = range_start + original_sources[index+1]
-      ranges << (range_start..range_end)
-    end
-    ranges.map(&:to_a).flatten
   end
 end
 
@@ -129,4 +125,5 @@ if __FILE__ == $PROGRAM_NAME
   almanac_doc = File.read("input.txt")
   almanac = Almanac.parse(almanac_doc)
   puts almanac.min_final_destination
+  puts almanac.min_final_destination_for_ranges
 end
