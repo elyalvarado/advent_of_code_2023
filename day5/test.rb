@@ -51,11 +51,21 @@ class Day5 < Minitest::Test
 
   def test_map_range_map_under
     map_range = MapRange.parse("50 98 2")
-    assert_equal nil, map_range.map(97)
+    assert_nil map_range.map(97)
   end
 
   def test_map_range_map_over
     map_range = MapRange.parse("50 98 2")
-    assert_equal nil, map_range.map(100)
+    assert_nil map_range.map(100)
+  end
+
+  def test_map_parse
+    map_doc = <<~DOC
+    seed-to-soil map:
+      50 98 2
+    DOC
+    map_range = MapRange.new(destination_range_start: 50, source_range_start: 98, length: 2)
+    assert_equal Map.new(source_category: "seed", destination_category: "soil", ranges: [map_range]),
+                 Map.parse(map_doc)
   end
 end

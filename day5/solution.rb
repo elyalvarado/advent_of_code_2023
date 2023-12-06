@@ -4,7 +4,25 @@ end
 
 class Map
   attr_reader :source_category, :destination_category, :ranges
+  def initialize(source_category:, destination_category:, ranges: [])
+    @source_category = source_category
+    @destination_category = destination_category
+    @ranges = ranges
+  end
 
+  def self.parse(doc)
+    lines = doc.split("\n")
+    first_line = lines.shift
+    source_category, destination_category = first_line.split(" ")[0].split("-to-")
+    ranges = lines.map { |line| MapRange.parse(line) }
+    self.new(source_category: source_category, destination_category: destination_category, ranges: ranges)
+  end
+
+  def ==(another)
+    self.source_category == another.source_category &&
+      self.destination_category == another.destination_category &&
+      self.ranges.sort == another.ranges.sort
+  end
 end
 
 class MapRange
