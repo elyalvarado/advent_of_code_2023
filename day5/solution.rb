@@ -20,6 +20,14 @@ class Almanac
     end.min
   end
 
+  def min_final_destination_for_ranges
+    ex = expanded_sources
+    puts expanded_sources.inspect
+    expanded_sources.map do |source|
+      destination_for(source)
+    end.min
+  end
+
   def ==(another)
     self.original_sources == another.original_sources && self.maps == another.maps
   end
@@ -33,6 +41,17 @@ class Almanac
       current_source = current_destination
     end
     current_destination
+  end
+
+  def expanded_sources
+    ranges = []
+    (original_sources.size/2).times do |i|
+      index = i * 2
+      range_start = original_sources[index]
+      range_end = range_start + original_sources[index+1]
+      ranges << (range_start..range_end)
+    end
+    ranges.map(&:to_a).flatten
   end
 end
 
