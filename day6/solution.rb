@@ -32,6 +32,15 @@ end
 
 class RaceCollection
   attr_reader :races
+
+
+  def total_options
+    # puts races.map(&:beat_options).inspect
+    races.map(&:beat_options).map(&:size).inject(:*)
+  end
+end
+
+class MultipleRaces < RaceCollection
   def initialize(doc)
     times, distances = doc.split("\n")
                           .map { |line| line.split(":")[1] }
@@ -42,14 +51,23 @@ class RaceCollection
     end
     @races
   end
+end
 
-  def total_options
-    # puts races.map(&:beat_options).inspect
-    races.map(&:beat_options).map(&:size).inject(:*)
+class SingleRace < RaceCollection
+  def initialize(doc)
+    time, distance = doc.split("\n")
+                          .map { |line| line.split(":")[1] }
+                          .map { |line| line.split(" ").join.to_i }
+    @races = [ Race.new(time, distance) ]
   end
 end
 
 
 if __FILE__ == $PROGRAM_NAME
-  # doc = File.read("input.txt")
+  doc = File.read("input.txt")
+  races = MultipleRaces.new(doc)
+  puts races.total_options
+
+  single_race = SingleRace.new(doc)
+  puts single_race.total_options
 end

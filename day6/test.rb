@@ -13,7 +13,7 @@ class Day6 < Minitest::Test
       Race.new(15,40),
       Race.new(30, 200)
     ]
-    assert_equal expected_races, RaceCollection.new(RACES_DOC).races
+    assert_equal expected_races, MultipleRaces.new(RACES_DOC).races
   end
 
   def test_beat_options
@@ -27,6 +27,17 @@ class Day6 < Minitest::Test
   end
 
   def test_total_options
-    assert_equal 288, RaceCollection.new(RACES_DOC).total_options
+    assert_equal 288, MultipleRaces.new(RACES_DOC).total_options
+  end
+
+  def test_parse_single_race
+    expected_races = [
+      Race.new(71530,940200)
+    ]
+    assert_equal expected_races, SingleRace.new(RACES_DOC).races
+  end
+
+  def test_single_race_total_options
+    assert_equal 71503, SingleRace.new(RACES_DOC).total_options
   end
 end
