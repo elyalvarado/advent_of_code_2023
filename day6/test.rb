@@ -15,4 +15,8 @@ class Day6 < Minitest::Test
     ]
     assert_equal expected_races, Race.parse_races(RACES_DOC)
   end
+
+  def test_beat_options
+    assert_equal [2,3,4,5], Race.new(7, 9 ).beat_options
+  end
 end
