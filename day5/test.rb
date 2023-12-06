@@ -62,10 +62,26 @@ class Day5 < Minitest::Test
   def test_map_parse
     map_doc = <<~DOC
     seed-to-soil map:
-      50 98 2
+    50 98 2
     DOC
     map_range = MapRange.new(destination_range_start: 50, source_range_start: 98, length: 2)
     assert_equal Map.new(source_category: "seed", destination_category: "soil", ranges: [map_range]),
                  Map.parse(map_doc)
+  end
+
+  def test_map_map
+    map_doc = <<~DOC
+      soil-to-fertilizer map:
+      0 15 37
+      37 52 2
+      39 0 15
+    DOC
+
+    map = Map.parse(map_doc)
+    assert_equal 81, map.map(81)
+    assert_equal 53, map.map(14)
+    assert_equal 57, map.map(57)
+    assert_equal 52, map.map(13)
+
   end
 end

@@ -23,6 +23,17 @@ class Map
       self.destination_category == another.destination_category &&
       self.ranges.sort == another.ranges.sort
   end
+
+  def map(source)
+    destination = ranges.inject(nil) do |current_destination, range|
+      if current_destination.nil?
+        current_destination = range.map(source)
+      end
+      current_destination
+    end
+    return source if destination.nil?
+    destination
+  end
 end
 
 class MapRange
