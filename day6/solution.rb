@@ -24,16 +24,19 @@ class Race
     solution2 = (-1 * time + Math.sqrt(time**2 - 4 * distance))/-2
     (solution2.ceil..solution1.floor).to_a
   end
+end
 
-  def self.parse_races(doc)
+class RaceCollection
+  attr_reader :races
+  def initialize(doc)
     times, distances = doc.split("\n")
                           .map { |line| line.split(":")[1] }
                           .map { |line| line.split(" ") }
-    races = []
+    @races = []
     times.each_with_index do |time, index|
       races << Race.new(time.to_i, distances[index].to_i )
     end
-    races
+    @races
   end
 end
 

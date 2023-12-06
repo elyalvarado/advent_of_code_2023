@@ -13,7 +13,7 @@ class Day6 < Minitest::Test
       Race.new(15,40),
       Race.new(30, 200)
     ]
-    assert_equal expected_races, Race.parse_races(RACES_DOC)
+    assert_equal expected_races, RaceCollection.new(RACES_DOC).races
   end
 
   def test_beat_options
