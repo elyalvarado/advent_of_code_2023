@@ -108,8 +108,8 @@ class Day5 < Minitest::Test
                  Almanac.parse(almanac_doc)
   end
 
-  def test_final_destinations
+  def test_min_final_destination
     almanac = Almanac.parse(ALMANAC)
-    assert_equal [82, 43, 86, 35], almanac.final_destinations
+    assert_equal 35, almanac.min_final_destination
   end
 end

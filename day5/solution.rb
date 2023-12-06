@@ -14,10 +14,10 @@ class Almanac
     self.new(original_sources: original_sources, maps: maps)
   end
 
-  def final_destinations
+  def min_final_destination
     original_sources.map do |source|
       destination_for(source)
-    end
+    end.min
   end
 
   def ==(another)
@@ -109,5 +109,5 @@ end
 if __FILE__ == $PROGRAM_NAME
   almanac_doc = File.read("input.txt")
   almanac = Almanac.parse(almanac_doc)
-  puts almanac.final_destinations.min
+  puts almanac.min_final_destination
 end
