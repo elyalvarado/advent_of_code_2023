@@ -51,5 +51,7 @@ class Day7 < Minitest::Test
     assert_equal 6440, CamelCards.new(HANDS_LIST).total_winnings
   end
 
-
+  def test_total_winnings_joker_rules
+    assert_equal 5905, CamelCards.new(HANDS_LIST, rules: HandJokerRule).total_winnings
+  end
 end
