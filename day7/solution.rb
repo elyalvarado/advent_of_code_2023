@@ -1,8 +1,10 @@
 class Hand
   include Comparable
 
+  attr_reader :bid, :hand
   def initialize(hand_string)
-    @hand = hand_string
+    @hand, @bid = hand_string.split(" ")
+    @bid = @bid.to_i
   end
 
   def <=>(another)
@@ -41,6 +43,7 @@ class Hand
     # @hex_value
   end
 
+  private
   def counts
     @counts ||= cards.inject(Hash.new(0)) { |hash, card|
       hash[card] += 1
@@ -50,6 +53,21 @@ class Hand
 
   def cards
     @cards ||= @hand.split('')
+  end
+end
+
+class CamelCards
+  def initialize(hands_doc)
+    @hands = hands_doc.split("\n").map { |line| Hand.new(line)}
+  end
+
+  def total_winnings
+    winnings = 0
+    @hands.sort.each_with_index do |hand, index|
+      # puts "hand: #{hand.hand}, bid: #{hand.bid}, index: #{index}"
+      winnings += hand.bid * (index+1)
+    end
+    winnings
   end
 end
 
