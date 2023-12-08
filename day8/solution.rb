@@ -48,7 +48,6 @@ class NetworkMap
     end
     instructions.first
   end
-
 end
 
 class Instruction
@@ -74,4 +73,7 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   doc = File.read("input.txt")
+  network_map = NetworkMap.new(doc)
+  network_map.complete!
+  puts network_map.moves
 end
