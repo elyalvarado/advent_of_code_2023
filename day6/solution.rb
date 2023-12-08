@@ -33,9 +33,7 @@ end
 class RaceCollection
   attr_reader :races
 
-
   def total_options
-    # puts races.map(&:beat_options).inspect
     races.map(&:beat_options).map(&:size).inject(:*)
   end
 end
@@ -61,7 +59,6 @@ class SingleRace < RaceCollection
     @races = [ Race.new(time, distance) ]
   end
 end
-
 
 if __FILE__ == $PROGRAM_NAME
   doc = File.read("input.txt")
