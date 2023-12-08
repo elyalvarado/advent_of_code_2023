@@ -31,7 +31,7 @@ class Hand
         'E'
       when 'Q'
         'D'
-      when 'K'
+      when 'J'
         'C'
       when 'T'
         'B'
@@ -64,7 +64,7 @@ class CamelCards
   def total_winnings
     winnings = 0
     @hands.sort.each_with_index do |hand, index|
-      # puts "hand: #{hand.hand}, bid: #{hand.bid}, index: #{index}"
+      # puts "hand: #{hand.hand}, bid: #{hand.bid}, index: #{index}, repeat_value: #{hand.repeat_value}, hex_value: #{hand.hex_value}"
       winnings += hand.bid * (index+1)
     end
     winnings
@@ -72,5 +72,7 @@ class CamelCards
 end
 
 if __FILE__ == $PROGRAM_NAME
-
+  doc = File.read("input.txt")
+  camel_cards = CamelCards.new(doc)
+  puts camel_cards.total_winnings
 end
