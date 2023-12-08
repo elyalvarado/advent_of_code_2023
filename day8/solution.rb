@@ -2,7 +2,7 @@ class NetworkMap
   INITIAL_NODE = 'AAA'
   FINAL_NODE = 'ZZZ'
 
-  attr_reader :nodes, :current_instruction, :moves, :current_node
+  attr_reader :nodes, :current_instruction, :moves
   def initialize(map_doc)
     instructions_doc, nodes_doc = map_doc.split("\n\n")
     @nodes = parse_nodes(nodes_doc)
@@ -12,7 +12,7 @@ class NetworkMap
   end
 
   def move!
-    return false if @current_node == FINAL_NODE
+    return false if finished?
     next_node = nodes[@current_node][@current_instruction.index_value]
     @current_instruction = @current_instruction.next
     @moves += 1
@@ -27,6 +27,9 @@ class NetworkMap
   end
 
   private
+  def finished?
+    @current_node == FINAL_NODE
+  end
   def parse_nodes(doc)
     h = {}
     doc.split("\n").each do |line|
