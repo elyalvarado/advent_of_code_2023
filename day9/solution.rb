@@ -16,7 +16,7 @@ class History
   def self.sum_extrapolated(doc)
     next_values = doc.split("\n").map do |line|
       # puts line.split(' ').join(",")
-      n = History.new(line).next
+      n = self.new(line).next
       # puts n
       n
     end
@@ -68,9 +68,10 @@ class History
     matrix.each do |l|
       line = l.dup
       break if line.compact.length == 0
-      while line.pop.nil?
+      while (x = line.pop).nil?
         true
       end
+      line.push(x)
       line.map! { |v| v.nil? ? 'X' : v }
       puts line.join('|')
     end
@@ -78,7 +79,34 @@ class History
   end
 end
 
+class HistoryBackwards < History
+
+  private
+  def fill_up_from(current_line_index)
+    # puts 'initial matrix'
+    # debug(@matrix)
+
+    # puts 'adding another zero'
+    current_line = @matrix[current_line_index]
+    add_index = current_line.length - 1
+    current_line[add_index] = 0
+    current_line_index -= 1
+    # debug(@matrix)
+
+    # puts 'filling up'
+    while true do
+      current_line = @matrix[current_line_index]
+      next_line = @matrix[current_line_index + 1]
+      current_line[add_index] = current_line[0] - next_line[add_index]
+      # debug(@matrix)
+      return current_line[add_index] if current_line_index == 0
+      current_line_index -= 1
+    end
+  end
+end
+
 if __FILE__ == $PROGRAM_NAME
   doc = File.read('input.txt')
   puts History.sum_extrapolated(doc)
+  puts HistoryBackwards.sum_extrapolated(doc)
 end

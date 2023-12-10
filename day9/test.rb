@@ -27,4 +27,20 @@ class Day9 < Minitest::Test
   def test_sum_extrapolated
     assert_equal 114, History.sum_extrapolated(REPORT)
   end
+
+  def test_assert_next_backwards_1
+    assert_equal -3, HistoryBackwards.new('0 3 6 9 12 15').next
+  end
+
+  def test_assert_next_backwards_2
+    assert_equal 0, HistoryBackwards.new('1 3 6 10 15 21').next
+  end
+
+  def test_assert_next_backwards_3
+    assert_equal 5, HistoryBackwards.new('10 13 16 21 30 45').next
+  end
+
+  def test_sum_extrapolate_backwards
+    assert_equal 2, HistoryBackwards.sum_extrapolated(REPORT)
+  end
 end
