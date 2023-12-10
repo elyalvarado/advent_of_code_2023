@@ -61,6 +61,8 @@ class NetworkMapMultiplePath < NetworkMap
     @current_instruction = parse_instructions(instructions_doc)
     @moves = 0
     @current_nodes = initial_nodes
+    @periods = Array.new(@current_nodes.length)
+    @last_finish_move = Array.new(@current_nodes.length)
   end
 
   def move!
@@ -69,7 +71,22 @@ class NetworkMapMultiplePath < NetworkMap
     @current_instruction = @current_instruction.next
     @moves += 1
     @current_nodes = next_nodes
+    @current_nodes.each_with_index do |node, index|
+      if node[-1] == 'Z'
+        if @last_finish_move[index].nil?
+          @last_finish_move[index] = @moves
+        elsif @periods[index].nil?
+          @periods[index] = @moves - @last_finish_move[index]
+        end
+      end
+    end
+    # puts @moves
     true
+  end
+
+  def moves
+    # puts @periods.inspect
+    @periods.reduce(&:lcm)
   end
 
   private
@@ -78,10 +95,8 @@ class NetworkMapMultiplePath < NetworkMap
   end
 
   def finished?
-    @current_nodes.inject(true) { |memo, node| memo && node[-1] == 'Z' }
+    @periods.compact.length == @current_nodes.length
   end
-
-
 end
 
 class Instruction
@@ -111,7 +126,7 @@ if __FILE__ == $PROGRAM_NAME
   network_map.complete!
   puts network_map.moves
 
-  multiple_network_map = NetworkMapMultiplePath(doc)
+  multiple_network_map = NetworkMapMultiplePath.new(doc)
   multiple_network_map.complete!
   puts multiple_network_map.moves
 end
