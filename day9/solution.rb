@@ -9,7 +9,22 @@ class History
     end
   end
 
-  def next2
+  def next
+    fill_up_from(fill_down)
+  end
+
+  def self.sum_extrapolated(doc)
+    next_values = doc.split("\n").map do |line|
+      # puts line.split(' ').join(",")
+      n = History.new(line).next
+      # puts n
+      n
+    end
+    next_values.reduce(:+)
+  end
+
+  private
+  def fill_down
     current_line_index = 1
     # puts 'filling down'
     while true do
@@ -26,7 +41,10 @@ class History
       break if all_zeroes
       current_line_index += 1
     end
+    current_line_index
+  end
 
+  def fill_up_from(current_line_index)
     # puts 'adding another zero'
     current_line = @matrix[current_line_index]
     add_index = current_line.length - current_line_index - 1
@@ -44,61 +62,6 @@ class History
       return current_line[max_index] if current_line_index == 0
       current_line_index -= 1
     end
-  end
-
-  def next
-    # debug(@matrix)
-    current_line = 1
-    current_index = @numbers.length - 2
-    while true do
-      current_value = calculate_down(current_line, current_index)
-      current_line += 1
-      current_index -= 1
-      # puts "calculated down value #{current_value}"
-      # debug(@matrix)
-      break if current_value == 0
-    end
-    n = calculate_up(0, @numbers.length)
-    # debug(@matrix)
-    # n
-  end
-
-  def self.sum_extrapolated(doc)
-    next_values = doc.split("\n").map do |line|
-      # puts line.split(' ').join(",")
-      n = History.new(line).next2
-      # puts n
-      n
-    end
-    next_values.reduce(:+)
-  end
-
-  private
-  def calculate_down(line, index)
-    # puts "calcualte down Line #{line} index #{index}"
-    return @matrix[line][index] unless @matrix[line][index].nil?
-    @matrix[line][index] = calculate_down(line-1,index+1) - calculate_down(line-1,index)
-    # if @matrix[line][index] == 0 && @matrix[line][index+1].nil?
-    #   # puts "Filling with zeros line #{line}, upto index #{index} because "
-    #   (0...index).each do |i|
-    #     @matrix[line][i] = 0
-    #   end
-    # end
-    @matrix[line][index]
-  end
-
-  def calculate_up(line, index)
-    # puts "calculate up Line #{line} index #{index}"
-    return @matrix[line][index] unless @matrix[line][index].nil?
-    if @matrix[line+1][index-2] == 0
-      @matrix[line+1][index-1] = 0
-      @matrix[line][index] = @matrix[line][index-1]
-      # debug(@matrix)
-      return @matrix[line][index]
-    end
-    @matrix[line][index] = @matrix[line][index-1] + calculate_up(line+1,index-1)
-    # debug(@matrix)
-    # @matrix[line][index]
   end
 
   def debug(matrix)
