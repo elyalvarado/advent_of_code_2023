@@ -61,4 +61,5 @@ if __FILE__ == $PROGRAM_NAME
   doc = File.read('input.txt')
   galaxies_map = GalaxiesMap.new(doc)
   puts galaxies_map.sum_distances
+  puts galaxies_map.sum_distances(expansion: 1_000_000)
 end
