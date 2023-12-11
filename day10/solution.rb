@@ -26,6 +26,7 @@ class PipeMap
     @previous_position = nil
     @path = Hash.new(false)
     @path[@starting_position] = true
+    @first_goes_up = false
   end
 
   def move
@@ -93,7 +94,7 @@ class PipeMap
       # }
       # puts @pipemap.inspect
       # puts all.inspect
-      return up if %w{| 7 F}.include?(char_for_position(up))
+      return up if %w{| 7 F}.include?(char_for_position(up)) && (@first_goes_up = true)
       return right if %w{- 7 J}.include?(char_for_position(right))
       return down if %w{| J L}.include?(char_for_position(down))
       return left if %w{- L F}.include?(char_for_position(left))
@@ -114,6 +115,7 @@ class PipeMap
   end
 
   def goes_up(position)
+    return @first_goes_up if position == @starting_position
     %w{ L J | }.include?(char_for_position(position))
   end
 end
