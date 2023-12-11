@@ -21,22 +21,22 @@ class GalaxiesMap
     @columns_without_galaxies ||= (0..(@line_length-1)).to_a - @galaxies.map { |position| position[1] }
   end
 
-  def sum_distances
+  def sum_distances(expansion: 2)
     distance = permutations.inject(0) do |sum, galaxy_pair|
-      sum += distance_between_galaxies(*galaxy_pair)
+      sum += distance_between_galaxies(*galaxy_pair, expansion: expansion)
       sum
     end
     distance/2
   end
 
-  def distance_between_galaxies(galaxy1, galaxy2)
+  def distance_between_galaxies(galaxy1, galaxy2, expansion: 2)
     galaxy_pair = [galaxy1, galaxy2]
     horizontal_coordinates = galaxy_pair.map(&:last).sort
     vertical_coordinates = galaxy_pair.map(&:first).sort
     distance_between(*horizontal_coordinates) +
-      columns_without_galaxies_between(*horizontal_coordinates) +
+      columns_without_galaxies_between(*horizontal_coordinates) * (expansion - 1) +
       distance_between(*vertical_coordinates) +
-      rows_without_galaxies_between(*vertical_coordinates)
+      rows_without_galaxies_between(*vertical_coordinates) * (expansion - 1)
   end
 
   private
@@ -59,5 +59,6 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   doc = File.read('input.txt')
-
+  galaxies_map = GalaxiesMap.new(doc)
+  puts galaxies_map.sum_distances
 end

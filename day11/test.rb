@@ -34,4 +34,16 @@ class Day11 < Minitest::Test
     assert_equal 374, GalaxiesMap.new(GALAXIES).sum_distances
   end
 
+  def test_distance_between_galaxies_with_expansion
+    galaxies_map = GalaxiesMap.new(GALAXIES)
+    assert_equal 5, galaxies_map.distance_between_galaxies(galaxies_map.galaxies[7], galaxies_map.galaxies[8], expansion: 2)
+    assert_equal 6, galaxies_map.distance_between_galaxies(galaxies_map.galaxies[7], galaxies_map.galaxies[8], expansion: 3)
+    assert_equal 1003, galaxies_map.distance_between_galaxies(galaxies_map.galaxies[7], galaxies_map.galaxies[8], expansion: 1000)
+  end
+
+  def test_sum_distances_with_expansions
+    assert_equal 1030, GalaxiesMap.new(GALAXIES).sum_distances(expansion: 10)
+    assert_equal 8410, GalaxiesMap.new(GALAXIES).sum_distances(expansion: 100)
+  end
+
 end
