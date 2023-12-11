@@ -24,6 +24,7 @@ class PipeMap
     @current_position = @starting_position
     @moves = 0
     @previous_position = nil
+    @path = [ @starting_position ]
   end
 
   def move
@@ -31,6 +32,7 @@ class PipeMap
     tmp_current = current_position
     @current_position = next_position
     @previous_position = tmp_current
+    @path << @current_position
     @moves += 1
     true
   end
@@ -40,6 +42,22 @@ class PipeMap
       true
     end
     true
+  end
+
+  def count_in
+    count = 0
+    @pipemap.each_with_index do |line, line_index|
+      is_in = false
+      line.split('').each_with_index do |char, char_index|
+        if toggles_is_in([line_index, char_index])
+          is_in = !is_in
+        end
+        if is_in && !@path.include?([line_index, char_index])
+          count += 1
+        end
+      end
+    end
+    count
   end
 
   private
@@ -84,6 +102,18 @@ class PipeMap
 
   def char_for_position(position)
     @pipemap[position[0]][position[1]]
+  end
+
+  def toggles_is_in(position)
+    path_has(position) && goes_up(position)
+  end
+
+  def path_has(position)
+    @path.include?(position)
+  end
+
+  def goes_up(position)
+    %w{ L J | }.include?(char_for_position(position))
   end
 end
 
