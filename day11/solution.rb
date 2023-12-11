@@ -22,11 +22,10 @@ class GalaxiesMap
   end
 
   def sum_distances(expansion: 2)
-    distance = permutations.inject(0) do |sum, galaxy_pair|
+    permutations.inject(0) do |sum, galaxy_pair|
       sum += distance_between_galaxies(*galaxy_pair, expansion: expansion)
       sum
     end
-    distance
   end
 
   def distance_between_galaxies(galaxy1, galaxy2, expansion: 2)
