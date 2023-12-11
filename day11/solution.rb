@@ -26,7 +26,7 @@ class GalaxiesMap
       sum += distance_between_galaxies(*galaxy_pair, expansion: expansion)
       sum
     end
-    distance/2
+    distance
   end
 
   def distance_between_galaxies(galaxy1, galaxy2, expansion: 2)
@@ -41,7 +41,7 @@ class GalaxiesMap
 
   private
   def permutations
-    @permutations ||= @galaxies.permutation(2)
+    @permutations ||= @galaxies.permutation(2).map(&:sort).uniq
   end
 
   def rows_without_galaxies_between(row1,row2)
