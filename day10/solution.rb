@@ -24,7 +24,8 @@ class PipeMap
     @current_position = @starting_position
     @moves = 0
     @previous_position = nil
-    @path = [ @starting_position ]
+    @path = Hash.new(false)
+    @path[@starting_position] = true
   end
 
   def move
@@ -32,7 +33,7 @@ class PipeMap
     tmp_current = current_position
     @current_position = next_position
     @previous_position = tmp_current
-    @path << @current_position
+    @path[@current_position] = true
     @moves += 1
     true
   end
@@ -109,7 +110,7 @@ class PipeMap
   end
 
   def path_has(position)
-    @path.include?(position)
+    @path[position]
   end
 
   def goes_up(position)
@@ -122,4 +123,5 @@ if __FILE__ == $PROGRAM_NAME
   pipe_map = PipeMap.new(doc)
   pipe_map.complete_round
   puts "Path length: #{pipe_map.moves}, farther point: #{pipe_map.moves/2}"
+  puts "In: #{pipe_map.count_in}"
 end
