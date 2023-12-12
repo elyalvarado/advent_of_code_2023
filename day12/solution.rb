@@ -49,4 +49,5 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   doc = File.read('input.txt')
+  puts SpringsMap.new(doc).arrangements
 end
