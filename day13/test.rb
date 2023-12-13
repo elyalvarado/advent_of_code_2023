@@ -75,4 +75,9 @@ class Day < Minitest::Test
     assert_equal 405, MirrorCollection.new(doc).summarize
   end
 
+  def test_summarize_smudged
+    doc = MIRRORDOC1 + "\n" + MIRRORDOC2
+    assert_equal 400, MirrorCollection.new(doc).summarize(smudges: 1)
+  end
+
 end

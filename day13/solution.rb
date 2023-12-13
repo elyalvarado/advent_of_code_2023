@@ -68,12 +68,12 @@ class MirrorCollection
     @mirrors = doc.split("\n\n").map { |mirror_doc| Mirror.new(mirror_doc) }
   end
 
-  def summarize
+  def summarize(smudges: 0)
     @mirrors.inject(0) do |summary, mirror|
       puts "v: #{mirror.vertical_lor} h: #{mirror.horizontal_lor}"
       prev_summary = summary
-      summary += mirror.vertical_lor
-      summary += mirror.horizontal_lor * 100
+      summary += mirror.vertical_lor(smudges: smudges)
+      summary += mirror.horizontal_lor(smudges: smudges) * 100
       puts mirror.doc if prev_summary == summary
       summary
     end
