@@ -57,6 +57,19 @@ class Day < Minitest::Test
     assert_equal 0, Mirror.new(MIRRORDOC1).horizontal_lor
   end
 
+  def test_horizontal_lor_with_smudge
+    assert_equal 3, Mirror.new(MIRRORDOC1).horizontal_lor(smudges: 1)
+  end
+
+  def test_horizontal_lor_with_smudge2
+    assert_equal 1, Mirror.new(MIRRORDOC2).horizontal_lor(smudges: 1)
+  end
+
+  def test_vertical_lor_with_smudge
+    assert_equal 0, Mirror.new(MIRRORDOC1).vertical_lor(smudges: 1)
+    assert_equal 0, Mirror.new(MIRRORDOC2).vertical_lor(smudges: 1)
+  end
+
   def test_summarize
     doc = MIRRORDOC1 + "\n" + MIRRORDOC2
     assert_equal 405, MirrorCollection.new(doc).summarize
