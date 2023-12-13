@@ -22,6 +22,22 @@ class Day < Minitest::Test
     #....#..#
   DOC
 
+  MIRRORDOC3 = <<~DOC
+    .##...#.#
+    ####....#
+    ...####.#
+    #..#.####
+    .##.##.##
+    #####.#.#
+    ....#####
+    .##.##.#.
+    .##..##.#
+    #..#.####
+    .##...##.
+    #..#..###
+    #..#..###
+  DOC
+
   def test_vertical_lor
     assert_equal 5, Mirror.new(MIRRORDOC1).vertical_lor
   end
@@ -31,6 +47,10 @@ class Day < Minitest::Test
   end
   def test_horizontal_lor
     assert_equal 4, Mirror.new(MIRRORDOC2).horizontal_lor
+  end
+
+  def test_horizontal_lor_2
+    assert_equal 12, Mirror.new(MIRRORDOC3).horizontal_lor
   end
 
   def test_horizontal_lor_zero

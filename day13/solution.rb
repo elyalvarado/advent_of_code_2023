@@ -1,6 +1,7 @@
 class Mirror
-  attr_reader :width, :height, :matrix
+  attr_reader :width, :height, :matrix, :doc
   def initialize(doc)
+    @doc = doc
     @matrix = doc.split("\n").map { |line| line.split("") }
     @width = @matrix[0].size
     @height = @matrix.size
@@ -8,7 +9,7 @@ class Mirror
 
   def vertical_lor
     # lors = []
-    (1..(width-2)).each do |row_index|
+    (1..(width-1)).each do |row_index|
       # puts "Evaluating row_index #{row_index}"
       is_lor = true
       max_mirror_width = [row_index, width - row_index].min
@@ -34,7 +35,7 @@ class Mirror
 
   def horizontal_lor
     # lors = []
-    (1..(height-2)).each do |line_index|
+    (1..(height-1)).each do |line_index|
       # puts "Evaluating line_index #{line_index}"
       is_lor = true
       max_mirror_height = [line_index, height - line_index].min
@@ -65,9 +66,11 @@ class MirrorCollection
 
   def summarize
     @mirrors.inject(0) do |summary, mirror|
-      # puts "v: #{mirror.vertical_lor} h: #{mirror.horizontal_lor}"
+      puts "v: #{mirror.vertical_lor} h: #{mirror.horizontal_lor}"
+      prev_summary = summary
       summary += mirror.vertical_lor
       summary += mirror.horizontal_lor * 100
+      puts mirror.doc if prev_summary == summary
       summary
     end
   end
@@ -75,5 +78,5 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   doc = File.read('input.txt')
-  MirrorCollection.new(doc).summarize
+  puts MirrorCollection.new(doc).summarize
 end
