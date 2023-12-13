@@ -37,4 +37,9 @@ class Day < Minitest::Test
     assert_equal 0, Mirror.new(MIRRORDOC1).horizontal_lor
   end
 
+  def test_summarize
+    doc = MIRRORDOC1 + "\n" + MIRRORDOC2
+    assert_equal 405, MirrorCollection.new(doc).summarize
+  end
+
 end

@@ -58,6 +58,22 @@ class Mirror
   end
 end
 
+class MirrorCollection
+  def initialize(doc)
+    @mirrors = doc.split("\n\n").map { |mirror_doc| Mirror.new(mirror_doc) }
+  end
+
+  def summarize
+    @mirrors.inject(0) do |summary, mirror|
+      # puts "v: #{mirror.vertical_lor} h: #{mirror.horizontal_lor}"
+      summary += mirror.vertical_lor
+      summary += mirror.horizontal_lor * 100
+      summary
+    end
+  end
+end
+
 if __FILE__ == $PROGRAM_NAME
   doc = File.read('input.txt')
+  MirrorCollection.new(doc).summarize
 end
