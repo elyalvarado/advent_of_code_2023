@@ -13,27 +13,27 @@ class Parabolic
       last_round_rock = -1
       last_cube_rock = -1
       height.times do |line|
-        puts "line #{line} row #{row}: char #{matrix[line][row]} (last_cube: #{last_cube_rock}, last_round: #{last_round_rock}"
+        # puts "line #{line} row #{row}: char #{matrix[line][row]} (last_cube: #{last_cube_rock}, last_round: #{last_round_rock}"
         case matrix[line][row]
         when '#'
-          puts "- Updating last_cube_rock to #{line}"
+          # puts "- Updating last_cube_rock to #{line}"
           last_cube_rock = line
         when 'O'
           if last_cube_rock > last_round_rock
             move_to_line = last_cube_rock + 1
             last_round_rock = move_to_line
             total_load += height - move_to_line
-            puts "- Moving round rock and setting last_round to #{move_to_line}"
-            puts "- Incrementing score to: #{total_load} (increment #{height - move_to_line})"
+            # puts "- Moving round rock and setting last_round to #{move_to_line}"
+            # puts "- Incrementing score to: #{total_load} (increment #{height - move_to_line})"
           else
             move_to_line = last_round_rock + 1
             last_round_rock = move_to_line
             total_load += height - move_to_line
-            puts "- Moving round rock and setting last_round to #{move_to_line}"
-            puts "- Incrementing score to: #{total_load} (increment #{height - move_to_line})"
+            # puts "- Moving round rock and setting last_round to #{move_to_line}"
+            # puts "- Incrementing score to: #{total_load} (increment #{height - move_to_line})"
           end
         else
-          puts '- Nothing to do here'
+          # puts '- Nothing to do here'
         end
       end
     end
@@ -43,4 +43,5 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   doc = File.read('input.txt')
+  puts Parabolic.new(doc).total_load
 end
