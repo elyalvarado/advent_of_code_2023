@@ -32,6 +32,44 @@ class Day < Minitest::Test
     assert_equal expected_rounds, Parabolic.new(test_doc).rounds
   end
 
+  def test_rows
+    test_doc = "#..\n.0.\n..#"
+    expected_rows = {
+      0 => {
+        cubes: [[0,0]],
+        rounds: []
+      },
+      1 => {
+        cubes: [],
+        rounds: [[1,1]],
+      },
+      2 => {
+        cubes: [[2,2]],
+        rounds: []
+      }
+    }
+    assert_equal expected_rows, Parabolic.new(test_doc).rows
+  end
+
+  def test_lines
+    test_doc = "#..\n.0.\n0.#"
+    expected_lines = {
+      0 => {
+        cubes: [[0,0]],
+        rounds: []
+      },
+      1 => {
+        cubes: [],
+        rounds: [[1,1]],
+      },
+      2 => {
+        cubes: [[2,2]],
+        rounds: [[2,0]]
+      }
+    }
+    assert_equal expected_lines, Parabolic.new(test_doc).lines
+  end
+
   def test_total_load
     assert_equal 136, Parabolic.new(DOC).total_load
   end

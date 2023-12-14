@@ -40,12 +40,37 @@ class Parabolic
     total_load
   end
 
+  def tilt(direction)
+    # if direction is north or south we iterate over width
+    width.each_with_index
+  end
+
   def cubes
     @cubes ||= find_rocks('#')
   end
 
   def rounds
     @rounds ||= find_rocks('0')
+  end
+
+  def rows
+    @rows ||= width.times.inject({}) do |hash, i|
+      hash[i] = { cubes: [], rounds: [] }
+      hash
+    end
+    cubes.each { |cube| @rows[cube[1]][:cubes] << cube }
+    rounds.each { |round| @rows[round[1]][:rounds] << round }
+    @rows
+  end
+
+  def lines
+    @lines ||= height.times.inject({}) do |hash, i|
+      hash[i] = { cubes: [], rounds: [] }
+      hash
+    end
+    cubes.each { |cube| @lines[cube[0]][:cubes] << cube }
+    rounds.each { |round| @lines[round[0]][:rounds] << round }
+    @lines
   end
 
   private
