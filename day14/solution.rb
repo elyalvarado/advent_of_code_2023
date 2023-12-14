@@ -5,6 +5,7 @@ class Parabolic
     @matrix = doc.split("\n").map { |line| line.split("") }
     @width = @matrix.first.size
     @height = @matrix.size
+    lines && rows # prepulate lines and rows
   end
 
   def total_load
@@ -45,6 +46,34 @@ class Parabolic
     width.each_with_index
   end
 
+  def move(rock, delta)
+    # puts "lines"
+    # puts lines.inspect
+    # puts "---"
+    # puts "rows"
+    # puts rows.inspect
+    # puts '---'
+    current_rock_row = rock[1]
+    current_rock_line = rock[0]
+    rock[0] += delta[0]
+    rock[1] += delta[1]
+    if current_rock_row != rock[1]
+      rows[current_rock_row][:rounds].delete(rock)
+      rows[rock[1]][:rounds] << rock
+    end
+
+    if current_rock_line != rock[0]
+      lines[current_rock_line][:rounds].delete(rock)
+      lines[rock[0]][:rounds] << rock
+    end
+    # puts "lines"
+    # puts lines.inspect
+    # puts "---"
+    # puts "rows"
+    # puts rows.inspect
+    # puts '---'
+  end
+
   def cubes
     @cubes ||= find_rocks('#')
   end
@@ -54,7 +83,8 @@ class Parabolic
   end
 
   def rows
-    @rows ||= width.times.inject({}) do |hash, i|
+    return @rows if @rows
+    @rows = width.times.inject({}) do |hash, i|
       hash[i] = { cubes: [], rounds: [] }
       hash
     end
@@ -64,7 +94,8 @@ class Parabolic
   end
 
   def lines
-    @lines ||= height.times.inject({}) do |hash, i|
+    return @lines if @lines
+    @lines = height.times.inject({}) do |hash, i|
       hash[i] = { cubes: [], rounds: [] }
       hash
     end
