@@ -39,6 +39,25 @@ class Parabolic
     end
     total_load
   end
+
+  def cubes
+    @cubes ||= find_rocks('#')
+  end
+
+  def rounds
+    @rounds ||= find_rocks('0')
+  end
+
+  private
+  def find_rocks(shape)
+    matrix.each.with_index.inject([]) do |line_cubes, line_and_index|
+      line, line_index = *line_and_index
+      line.each_with_index do |char, char_index|
+        line_cubes << [line_index, char_index] if char == shape
+      end
+      line_cubes
+    end
+  end
 end
 
 if __FILE__ == $PROGRAM_NAME
