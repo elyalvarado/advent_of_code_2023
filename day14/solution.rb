@@ -5,7 +5,7 @@ class Parabolic
     @matrix = doc.split("\n").map { |line| line.split("") }
     @width = @matrix.first.size
     @height = @matrix.size
-    lines && rows # prepulate lines and rows
+    cubes; rounds; lines; rows # prepulate lines and rows
   end
 
   def total_load
@@ -41,9 +41,31 @@ class Parabolic
     total_load
   end
 
+  def total_load2
+    tilt(nil)
+    rounds.inject(0) { |sum, round| sum+=(height-round[0]); sum}
+  end
+
   def tilt(direction)
+    puts 'before:'
+    puts rounds.inspect
+    puts 'after:'
+    puts rounds.inspect
     # if direction is north or south we iterate over width
-    width.each_with_index
+    rows.each do |row_index, row|
+      prev_cube_line = -1
+      (row[:cubes].size+1).times.each do |index|
+        cube = row[:cubes][index] || [row_index, height]
+        cube_line = cube[0]
+        rounds = row[:rounds]
+                   .select { |round| round[0] > prev_cube_line && round[0] < cube_line }
+                   .sort_by { |round| round[0] }
+        rounds.each do |round|
+          move_by = (prev_cube_line + 1) - round[0]
+          move(round, [move_by, 0])
+        end
+      end
+    end
   end
 
   def move(rock, delta)
@@ -79,7 +101,7 @@ class Parabolic
   end
 
   def rounds
-    @rounds ||= find_rocks('0')
+    @rounds ||= find_rocks('O')
   end
 
   def rows
@@ -113,6 +135,39 @@ class Parabolic
       end
       line_cubes
     end
+  end
+end
+
+class Rock
+  def initialize(y, x)
+    @y = y
+    @x = x
+  end
+
+  def [](idx)
+    case idx
+    when 0
+      @y
+    when 1
+      @x
+    else
+      nil
+    end
+  end
+
+  def []=(idx, value)
+    case idx
+    when 0
+      @y = value
+    when 1
+      @x = value
+    else
+      # do nothing
+    end
+  end
+
+  def ==(another)
+    self[0] == another[0] && self[1] == another[1]
   end
 end
 

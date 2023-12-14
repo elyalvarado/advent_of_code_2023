@@ -16,8 +16,8 @@ class Day < Minitest::Test
   DOC
 
   def test_read_matrix
-    test_doc = "0..\n.0.\n..0"
-    assert_equal [ %w{0 . .}, %w{. 0 .}, %w{. . 0}], Parabolic.new(test_doc).matrix
+    test_doc = "O..\n.O.\n..O"
+    assert_equal [ %w{O . .}, %w{. O .}, %w{. . O}], Parabolic.new(test_doc).matrix
   end
 
   def test_cubes
@@ -27,13 +27,13 @@ class Day < Minitest::Test
   end
 
   def test_rounds
-    test_doc = "0..\n.0.\n000"
+    test_doc = "O..\n.O.\nOOO"
     expected_rounds = [[0,0],[1,1],[2,0],[2,1],[2,2]]
     assert_equal expected_rounds, Parabolic.new(test_doc).rounds
   end
 
   def test_rows
-    test_doc = "#..\n.0.\n..#"
+    test_doc = "#..\n.O.\n..#"
     expected_rows = {
       0 => {
         cubes: [[0,0]],
@@ -52,7 +52,7 @@ class Day < Minitest::Test
   end
 
   def test_lines
-    test_doc = "#..\n.0.\n0.#"
+    test_doc = "#..\n.O.\nO.#"
     expected_lines = {
       0 => {
         cubes: [[0,0]],
@@ -71,7 +71,7 @@ class Day < Minitest::Test
   end
 
   def test_move_rock
-    test_doc = "#..\n.0.\n..#"
+    test_doc = "#..\n.O.\n..#"
     parabolic = Parabolic.new(test_doc)
     rock = parabolic.rounds.first
     delta = [-1,0]
@@ -85,4 +85,10 @@ class Day < Minitest::Test
   def test_total_load
     assert_equal 136, Parabolic.new(DOC).total_load
   end
+
+  def xtest_total_load2
+    puts DOC
+    assert_equal 136, Parabolic.new(DOC).total_load2
+  end
+
 end
