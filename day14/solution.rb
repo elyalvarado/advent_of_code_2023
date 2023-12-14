@@ -131,7 +131,7 @@ class Parabolic
     matrix.each.with_index.inject([]) do |line_cubes, line_and_index|
       line, line_index = *line_and_index
       line.each_with_index do |char, char_index|
-        line_cubes << [line_index, char_index] if char == shape
+        line_cubes << Rock.new(line_index, char_index) if char == shape
       end
       line_cubes
     end

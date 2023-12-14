@@ -22,13 +22,13 @@ class Day < Minitest::Test
 
   def test_cubes
     test_doc = "#..\n.#.\n..#"
-    expected_cubes = [[0,0],[1,1],[2,2]]
+    expected_cubes = [[0,0],[1,1],[2,2]].map { |c| Rock.new(*c) }
     assert_equal expected_cubes, Parabolic.new(test_doc).cubes
   end
 
   def test_rounds
     test_doc = "O..\n.O.\nOOO"
-    expected_rounds = [[0,0],[1,1],[2,0],[2,1],[2,2]]
+    expected_rounds = [[0,0],[1,1],[2,0],[2,1],[2,2]].map { |c| Rock.new(*c) }
     assert_equal expected_rounds, Parabolic.new(test_doc).rounds
   end
 
@@ -36,15 +36,15 @@ class Day < Minitest::Test
     test_doc = "#..\n.O.\n..#"
     expected_rows = {
       0 => {
-        cubes: [[0,0]],
+        cubes: [Rock.new(0,0)],
         rounds: []
       },
       1 => {
         cubes: [],
-        rounds: [[1,1]],
+        rounds: [Rock.new(1,1)],
       },
       2 => {
-        cubes: [[2,2]],
+        cubes: [Rock.new(2,2)],
         rounds: []
       }
     }
@@ -55,16 +55,16 @@ class Day < Minitest::Test
     test_doc = "#..\n.O.\nO.#"
     expected_lines = {
       0 => {
-        cubes: [[0,0]],
+        cubes: [Rock.new(0,0)],
         rounds: []
       },
       1 => {
         cubes: [],
-        rounds: [[1,1]],
+        rounds: [Rock.new(1,1)],
       },
       2 => {
-        cubes: [[2,2]],
-        rounds: [[2,0]]
+        cubes: [Rock.new(2,2)],
+        rounds: [Rock.new(2,0)]
       }
     }
     assert_equal expected_lines, Parabolic.new(test_doc).lines
@@ -76,9 +76,10 @@ class Day < Minitest::Test
     rock = parabolic.rounds.first
     delta = [-1,0]
     parabolic.move(rock, delta)
-    assert_equal [0,1], rock
-    assert_equal [[0,1]], parabolic.lines[0][:rounds]
-    assert_equal [[0,1]], parabolic.rows[1][:rounds]
+    expected_rock = Rock.new(0,1)
+    assert_equal expected_rock, rock
+    assert_equal [expected_rock], parabolic.lines[0][:rounds]
+    assert_equal [expected_rock], parabolic.rows[1][:rounds]
     assert_equal [], parabolic.lines[1][:rounds]
   end
 
