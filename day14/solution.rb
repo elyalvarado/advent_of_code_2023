@@ -17,12 +17,34 @@ class Parabolic
   end
 
   def cycle(times = 1)
-    times.times do
+    h = Hash.new()
+    first_repeat_index = nil
+    repeat_period = nil
+    break_at = nil
+    times.times do |index|
       tilt_north
       tilt_west
       tilt_south
       tilt_east
+      # puts '---'
+      key = @matrix.map { |lines| lines.join("") }.join("\n")
+      if h[key] == nil
+        h[key] = { count: 1, indexes: [index]}
+      else
+        h[key][:count] += 1
+        h[key][:indexes] << index
+        if first_repeat_index.nil?
+          first_repeat_index = h[key][:indexes][0]
+          repeat_period = h[key][:indexes].inject(:-).abs
+          break_at = first_repeat_index + (times-first_repeat_index-1) % repeat_period + repeat_period
+          # puts "first_repeat_index: #{first_repeat_index}"
+          # puts "repeat_period: #{repeat_period}"
+          # puts "break_at: #{break_at}"
+        end
+        break if index == break_at
+      end
     end
+    # puts h.values.inspect
   end
 
   def move(rock, delta)
@@ -45,6 +67,9 @@ class Parabolic
       lines[current_rock_line][:rounds].delete(rock)
       lines[rock[0]][:rounds] << rock
     end
+
+    @matrix[current_rock_line][current_rock_row] = '.'
+    @matrix[rock[0]][rock[1]] = 'O'
     # puts "lines"
     # puts lines.inspect
     # puts "---"
@@ -169,40 +194,10 @@ class Parabolic
   end
 end
 
-class Rock
-  def initialize(y, x)
-    @y = y
-    @x = x
-  end
-
-  def [](idx)
-    case idx
-    when 0
-      @y
-    when 1
-      @x
-    else
-      nil
-    end
-  end
-
-  def []=(idx, value)
-    case idx
-    when 0
-      @y = value
-    when 1
-      @x = value
-    else
-      # do nothing
-    end
-  end
-
-  def ==(another)
-    self[0] == another[0] && self[1] == another[1]
-  end
-end
-
 if __FILE__ == $PROGRAM_NAME
   doc = File.read('input.txt')
-  puts Parabolic.new(doc).total_load
+  parabolic = Parabolic.new(doc)
+  puts parabolic.total_load
+  parabolic.cycle(1000000000)
+  puts parabolic.total_load
 end

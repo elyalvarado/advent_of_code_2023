@@ -146,4 +146,10 @@ class Day < Minitest::Test
     assert_equal expected_rounds, parabolic.rounds.sort
   end
 
+  def test_1000000000_cycles
+    parabolic = Parabolic.new(DOC)
+    parabolic.cycle(1000000000)
+    assert_equal 64, parabolic.total_load
+  end
+
 end
