@@ -47,23 +47,23 @@ class Parabolic
   end
 
   def tilt(direction)
-    puts 'before:'
-    puts rounds.inspect
-    puts 'after:'
-    puts rounds.inspect
+    # puts 'before:'
+    # puts rounds.sort_by { |r| [r[1],r[0]] }.inspect
+
     # if direction is north or south we iterate over width
     rows.each do |row_index, row|
       prev_cube_line = -1
       (row[:cubes].size+1).times.each do |index|
-        cube = row[:cubes][index] || [row_index, height]
+        cube = row[:cubes][index] || [height, row_index]
         cube_line = cube[0]
-        rounds = row[:rounds]
+        rounds_within = row[:rounds]
                    .select { |round| round[0] > prev_cube_line && round[0] < cube_line }
                    .sort_by { |round| round[0] }
-        rounds.each do |round|
-          move_by = (prev_cube_line + 1) - round[0]
+        rounds_within.each_with_index do |round, round_index|
+          move_by = (prev_cube_line + 1) - round[0] + round_index
           move(round, [move_by, 0])
         end
+        prev_cube_line = cube_line
       end
     end
   end
@@ -131,7 +131,7 @@ class Parabolic
     matrix.each.with_index.inject([]) do |line_cubes, line_and_index|
       line, line_index = *line_and_index
       line.each_with_index do |char, char_index|
-        line_cubes << Rock.new(line_index, char_index) if char == shape
+        line_cubes << [line_index, char_index] if char == shape
       end
       line_cubes
     end
