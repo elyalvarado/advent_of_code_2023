@@ -84,12 +84,66 @@ class Day < Minitest::Test
   end
 
   def test_total_load
-    assert_equal 136, Parabolic.new(DOC).total_load
+    parabolic = Parabolic.new(DOC)
+    parabolic.tilt
+    assert_equal 136, parabolic.total_load
   end
 
-  def test_total_load2
-    puts DOC
-    assert_equal 136, Parabolic.new(DOC).total_load2
+  def test_one_cycle
+    after_one_cycle_doc = <<~DOC
+      .....#....
+      ....#...O#
+      ...OO##...
+      .OO#......
+      .....OOO#.
+      .O#...O#.#
+      ....O#....
+      ......OOOO
+      #...O###..
+      #..OO#....
+    DOC
+    expected_rounds = Parabolic.new(after_one_cycle_doc).rounds.sort
+    parabolic = Parabolic.new(DOC)
+    parabolic.cycle
+    assert_equal expected_rounds, parabolic.rounds.sort
+  end
+
+  def test_two_cycles
+    after_two_cycle_doc = <<~DOC
+      .....#....
+      ....#...O#
+      .....##...
+      ..O#......
+      .....OOO#.
+      .O#...O#.#
+      ....O#...O
+      .......OOO
+      #..OO###..
+      #.OOO#...O
+    DOC
+    expected_rounds = Parabolic.new(after_two_cycle_doc).rounds.sort
+    parabolic = Parabolic.new(DOC)
+    parabolic.cycle(2)
+    assert_equal expected_rounds, parabolic.rounds.sort
+  end
+
+  def test_three_cycles
+    after_three_cycle_doc = <<~DOC
+      .....#....
+      ....#...O#
+      .....##...
+      ..O#......
+      .....OOO#.
+      .O#...O#.#
+      ....O#...O
+      .......OOO
+      #...O###.O
+      #.OOO#...O
+    DOC
+    expected_rounds = Parabolic.new(after_three_cycle_doc).rounds.sort
+    parabolic = Parabolic.new(DOC)
+    parabolic.cycle(3)
+    assert_equal expected_rounds, parabolic.rounds.sort
   end
 
 end

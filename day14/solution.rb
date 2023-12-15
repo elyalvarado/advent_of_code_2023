@@ -8,63 +8,20 @@ class Parabolic
     cubes; rounds; lines; rows # prepulate lines and rows
   end
 
-  def total_load
-    total_load = 0
-    width.times do |row|
-      last_round_rock = -1
-      last_cube_rock = -1
-      height.times do |line|
-        # puts "line #{line} row #{row}: char #{matrix[line][row]} (last_cube: #{last_cube_rock}, last_round: #{last_round_rock}"
-        case matrix[line][row]
-        when '#'
-          # puts "- Updating last_cube_rock to #{line}"
-          last_cube_rock = line
-        when 'O'
-          if last_cube_rock > last_round_rock
-            move_to_line = last_cube_rock + 1
-            last_round_rock = move_to_line
-            total_load += height - move_to_line
-            # puts "- Moving round rock and setting last_round to #{move_to_line}"
-            # puts "- Incrementing score to: #{total_load} (increment #{height - move_to_line})"
-          else
-            move_to_line = last_round_rock + 1
-            last_round_rock = move_to_line
-            total_load += height - move_to_line
-            # puts "- Moving round rock and setting last_round to #{move_to_line}"
-            # puts "- Incrementing score to: #{total_load} (increment #{height - move_to_line})"
-          end
-        else
-          # puts '- Nothing to do here'
-        end
-      end
-    end
-    total_load
+  def tilt
+    tilt_north
   end
 
-  def total_load2
-    tilt(nil)
+  def total_load
     rounds.inject(0) { |sum, round| sum+=(height-round[0]); sum}
   end
 
-  def tilt(direction)
-    # puts 'before:'
-    # puts rounds.sort_by { |r| [r[1],r[0]] }.inspect
-
-    # if direction is north or south we iterate over width
-    rows.each do |row_index, row|
-      prev_cube_line = -1
-      (row[:cubes].size+1).times.each do |index|
-        cube = row[:cubes][index] || [height, row_index]
-        cube_line = cube[0]
-        rounds_within = row[:rounds]
-                   .select { |round| round[0] > prev_cube_line && round[0] < cube_line }
-                   .sort_by { |round| round[0] }
-        rounds_within.each_with_index do |round, round_index|
-          move_by = (prev_cube_line + 1) - round[0] + round_index
-          move(round, [move_by, 0])
-        end
-        prev_cube_line = cube_line
-      end
+  def cycle(times = 1)
+    times.times do
+      tilt_north
+      tilt_west
+      tilt_south
+      tilt_east
     end
   end
 
@@ -134,6 +91,80 @@ class Parabolic
         line_cubes << [line_index, char_index] if char == shape
       end
       line_cubes
+    end
+  end
+
+  def tilt_north
+    rows.each do |row_index, row|
+      prev_cube_line = -1
+      (row[:cubes].size+1).times.each do |index|
+        cube = row[:cubes][index] || [height, row_index]
+        cube_line = cube[0]
+        rounds_within = row[:rounds]
+                          .select { |round| round[0] > prev_cube_line && round[0] < cube_line }
+                          .sort_by { |round| round[0] }
+        rounds_within.each_with_index do |round, round_index|
+          move_by = (prev_cube_line + 1) - round[0] + round_index
+          move(round, [move_by, 0])
+        end
+        prev_cube_line = cube_line
+      end
+    end
+  end
+
+  def tilt_west
+    lines.each do |line_index, line|
+      prev_cube_row = -1
+      (line[:cubes].size+1).times.each do |index|
+        cube = line[:cubes][index] || [line_index, width]
+        cube_row = cube[1]
+        rounds_within = line[:rounds]
+                          .select { |round| round[1] > prev_cube_row && round[1] < cube_row }
+                          .sort_by { |round| round[0] }
+        rounds_within.each_with_index do |round, round_index|
+          move_by = (prev_cube_row + 1) - round[1] + round_index
+          move(round, [0, move_by])
+        end
+        prev_cube_row = cube_row
+      end
+    end
+  end
+
+  def tilt_south
+    rows.each do |row_index, row|
+      prev_cube_line = -1
+      (row[:cubes].size+1).times.each do |index|
+        cube = row[:cubes][index] || [height, row_index]
+        cube_line = cube[0]
+        rounds_within = row[:rounds]
+                          .select { |round| round[0] > prev_cube_line && round[0] < cube_line }
+                          .sort_by { |round| round[0] }
+                          .reverse
+        rounds_within.each_with_index do |round, round_index|
+          move_by = cube_line - 1 - round[0] - round_index
+          move(round, [move_by, 0])
+        end
+        prev_cube_line = cube_line
+      end
+    end
+  end
+
+  def tilt_east
+    lines.each do |line_index, line|
+      prev_cube_row = -1
+      (line[:cubes].size+1).times.each do |index|
+        cube = line[:cubes][index] || [line_index, width]
+        cube_row = cube[1]
+        rounds_within = line[:rounds]
+                          .select { |round| round[1] > prev_cube_row && round[1] < cube_row }
+                          .sort_by { |round| round[0] }
+                          .reverse
+        rounds_within.each_with_index do |round, round_index|
+          move_by = cube_row - 1 - round[1] - round_index
+          move(round, [0, move_by])
+        end
+        prev_cube_row = cube_row
+      end
     end
   end
 end
