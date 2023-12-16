@@ -26,19 +26,7 @@ class Hasher
   end
 end
 
-class Lens
-  include Comparable
-
-  attr_accessor :label, :focal_length
-  def initialize(label, focal_length)
-    @label = label
-    @focal_length = focal_length
-  end
-
-  def ==(another)
-    self.label == another.label && self.focal_length == another.focal_length
-  end
-end
+Lens = Struct.new(:label, :focal_length)
 
 class Processor
   attr_reader :registers
