@@ -75,18 +75,15 @@ class Processor
 
   def equal(instruction)
     label, focal_length = instruction.split('=')
-    lens = Lens.new(label, focal_length.to_i)
     register = hashes(label)
-    registered_lens = @registers[register].find { |registered_lens| registered_lens.label == lens.label }
-    registered_lens ? registered_lens.focal_length = lens.focal_length : @registers[register] << lens
-
+    registered_lens = @registers[register].find { |registered_lens| registered_lens.label == label }
+    registered_lens ? registered_lens.focal_length = focal_length.to_i : @registers[register] << Lens.new(label, focal_length.to_i)
   end
 
   def minus(instruction)
-    label, focal_length = instruction.split('-')
-    lens = Lens.new(label, focal_length)
+    label, _ = instruction.split('-')
     register = hashes(label)
-    @registers[register] = @registers[register].reject { |registered_lens| registered_lens.label == lens.label }
+    @registers[register] = @registers[register].reject { |registered_lens| registered_lens.label == label }
   end
 
   def hashes(label)
