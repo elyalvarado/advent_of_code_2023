@@ -41,18 +41,21 @@ class Lens
 end
 
 class Processor
+  attr_reader :registers
   def initialize(doc)
-    @registers = Registers.new
+    @registers = Hash.new { |hash, key| hash[key] = [] }
     @hashes = {}
     process(doc)
   end
 
-  def registers
-    @registers.registers
-  end
-
   def focusing_power
-    @registers.focusing_power
+    power = 0
+    @registers.each do |box, slots|
+      slots.each_with_index do |lens, index|
+        power += (box + 1)*(index + 1)*(lens.focal_length)
+      end
+    end
+    power
   end
 
   private
@@ -74,14 +77,16 @@ class Processor
     label, focal_length = instruction.split('=')
     lens = Lens.new(label, focal_length.to_i)
     register = hashes(label)
-    @registers.equal(register: register, lens: lens)
+    registered_lens = @registers[register].find { |registered_lens| registered_lens.label == lens.label }
+    registered_lens ? registered_lens.focal_length = lens.focal_length : @registers[register] << lens
+
   end
 
   def minus(instruction)
     label, focal_length = instruction.split('-')
     lens = Lens.new(label, focal_length)
     register = hashes(label)
-    @registers.minus(register: register, lens: lens)
+    @registers[register] = @registers[register].reject { |registered_lens| registered_lens.label == lens.label }
   end
 
   def hashes(label)
@@ -89,33 +94,6 @@ class Processor
     @hashes[label] = Hasher.new(label).hash
   end
 end
-
-class Registers
-  attr_reader :registers
-  def initialize
-    @registers = Hash.new { |hash, key| hash[key] = [] }
-  end
-
-  def minus(register:, lens:)
-    registers[register] = registers[register].reject { |registered_lens| registered_lens.label == lens.label }
-  end
-
-  def equal(register:, lens:)
-    registered_lens = registers[register].find { |registered_lens| registered_lens.label == lens.label }
-    registered_lens ? registered_lens.focal_length = lens.focal_length : registers[register] << lens
-  end
-
-  def focusing_power
-    power = 0
-    @registers.each do |box, slots|
-      slots.each_with_index do |lens, index|
-        power += (box + 1)*(index + 1)*(lens.focal_length)
-      end
-    end
-    power
-  end
-end
-
 
 if __FILE__ == $PROGRAM_NAME
   doc = File.read('input.txt').strip

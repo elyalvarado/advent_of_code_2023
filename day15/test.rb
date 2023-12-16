@@ -11,28 +11,6 @@ class Day < Minitest::Test
     assert_equal 1320, SequenceHasher.new('rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7').hash
   end
 
-  def test_registers_equal
-    lens = Lens.new('rn',1)
-    registers = Registers.new
-    registers.equal(register: 0, lens: lens)
-    expected_registers = {
-      0 => [lens]
-    }
-    assert_equal expected_registers, registers.registers
-  end
-
-  def test_registers_minus
-    lens1 = Lens.new('rn',1)
-    lens2 = Lens.new('rn',9)
-    registers = Registers.new
-    registers.equal(register: 0, lens: lens1)
-    registers.minus(register: 0, lens: lens2)
-    expected_registers = {
-      0 => []
-    }
-    assert_equal expected_registers, registers.registers
-  end
-
   def test_processor_1
     lens = Lens.new('rn',1)
     expected_registers = {
