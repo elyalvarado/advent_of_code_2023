@@ -119,6 +119,6 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   doc = File.read('input.txt').strip
-  puts doc
   puts SequenceHasher.new(doc).hash
+  puts Processor.new(doc).focusing_power
 end
