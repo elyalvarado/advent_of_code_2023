@@ -19,4 +19,8 @@ class Day < Minitest::Test
   def test_energized
     assert_equal 46, Contraption.new(DOC).energized
   end
+
+  def test_max_energized
+    assert_equal 51, Contraption.new(DOC).max_energized
+  end
 end
