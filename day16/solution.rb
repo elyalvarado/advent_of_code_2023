@@ -4,8 +4,9 @@ class Contraption
     @height = @matrix.size
     @width = @matrix.first.size
     position = [0,0]
-    direction = [0,1]
-    @stack = [[position, direction]]
+    entering_direction = [0,1]
+    directions = DIRECTION_MAPS[@matrix.first.first][entering_direction]
+    @stack = directions.map { |direction| [position, direction] }
     @energized_hash = Hash.new { |hash, key| hash[key] = [] }
   end
 
@@ -95,4 +96,5 @@ end
 
 if __FILE__ == $PROGRAM_NAME
   doc = File.read('input.txt')
+  puts Contraption.new(doc).energized
 end
